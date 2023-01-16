@@ -42,7 +42,67 @@ function showCards() {
         `
     decks.innerHTML += cartinha
   }
-  
+  desvirarTudo()
 }
 
+function desvirar(card) {
+  if (card.classList.contains('turned')) {
+    return
+  }
+  if (cardOne !== undefined && cardTwo !== undefined) {
+    return
+  }
+  card.classList.add('turned')
+  moves++
+  if (cardOne === undefined) {
+    cardOne = card
+  } else {
+    if (cardTwo === undefined) {
+      cardTwo = card
+      if (cardOne.innerHTML === cardTwo.innerHTML) {
+        fixa()
+        hits += 2
+        checkGameOver()
+      } else {
+        setTimeout(vira, 1000)
+      }
+    }
+  }
+}
 
+function desvirarTudo() {
+  const cards = document.querySelectorAll('.turned')
+  for (let i = 0; i < cards.length; i++) {
+    cards[i].classList.remove('turned')
+  }
+}
+
+function fixa() {
+  cardOne = undefined
+  cardTwo = undefined
+}
+
+function checkGameOver() {
+  if (hits === baralho.length) {
+    setTimeout(gameOver, 1000)
+  } else {
+    console.log('Continua o jogo')
+  }
+}
+
+function vira() {
+  cardOne.classList.remove('turned')
+  cardTwo.classList.remove('turned')
+  fixa()
+}
+
+function gameOver() {
+  alert(`Você ganhou em ${moves} jogadas!`)
+  const recomecar = confirm('Deseja jogar novamente?')
+  if (recomecar === true) {
+    window.location.reload()
+  } else {
+    alert('Obrigado por jogar!')
+  }
+}
+ask()
